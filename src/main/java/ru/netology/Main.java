@@ -9,8 +9,6 @@ import java.util.concurrent.Executors;
 public class Main {
 
 
-
-
     public static void main(String[] args) throws IOException {
        ServerSocket serverSocket = new ServerSocket(9999);
         System.out.println("Waiting connections...");
