@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Request {
-    public Map<String, String> parseQuerystring(String queryString) {
+    public static Map<String, String> parseQueryString(String queryString) {
         Map<String, String> map = new HashMap<>();
         if ((queryString == null) || (queryString.equals(""))) {
             return map;
@@ -29,8 +29,12 @@ public class Request {
         return map;
     }
 
-    public String queryString(String uri) throws MalformedURLException {
+    public static String queryString(String uri) throws MalformedURLException {
         return uri.substring(2);
+    }
+
+    public static String getParamByName(Map<String, String> map,String name){
+       return map.get(name);
     }
 }
 

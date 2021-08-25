@@ -17,7 +17,8 @@ public class Server implements Runnable {
     private final Socket socket;
     final List<String> allowedMethods = of(GET, POST);
     final int limit = 4096;
-    Request request = new Request();
+
+
 
     public Server(Socket socket) {
         this.socket = socket;
@@ -69,10 +70,15 @@ public class Server implements Runnable {
                 return;
             }
             System.out.println(path);
-            System.out.println("Query параметры в виде map:");
-            //
-            String queryString = request.queryString(path);
-            System.out.println(request.parseQuerystring(queryString));
+            // получаем queryString из path
+            String queryString = Request.queryString(path);
+            // парсим queryString в map
+            final var map = Request.parseQueryString(queryString);
+            //демонстрация получения значения параметра по его имени
+            System.out.println(Request.getParamByName(map,"title"));
+            System.out.println(Request.getParamByName(map,"value"));
+            System.out.println(Request.getParamByName(map,"value1"));
+
 
             // ищем заголовки
             final var headersDelimiter = new byte[]{'\r', '\n', '\r', '\n'};
