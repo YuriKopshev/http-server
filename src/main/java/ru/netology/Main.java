@@ -7,17 +7,34 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
-
-
     public static void main(String[] args) throws IOException {
-       ServerSocket serverSocket = new ServerSocket(9999);
-        System.out.println("Waiting connections...");
-        ExecutorService poll = Executors.newFixedThreadPool(64);
-        while (true) {
-            Socket socket = serverSocket.accept();
-            Server server = new Server(socket);
-            poll.execute(server);
+        Server server = new Server(64);
+        server.listen(9999);
+        server.addHandler("GET", "static/default-get.html", ((request, out) -> {
+            final var method = request.getMethod();
+            if (!Server.allowedMethods.contains(method)) {
+                Server.badRequest(out);
+                return;
+            }
+
+            final var path = request.getPath();
+            if (!path.startsWith("/")) {
+                Server.badRequest(out);
+                return;
+            }
+
+            final var headers = request.getHeaders();
+
+            final var queryParams = request.getQueryParams();
+            out.write((
+                    "HTTP/1.1 200 OK\r\n" +
+                            "Content-Length: 0\r\n" +
+                            "Connection: close\r\n" +
+                            "\r\n"
+            ).getBytes());
+            out.flush();
         }
+        ));
     }
 }
 
